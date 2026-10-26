@@ -52,7 +52,6 @@
     }
     .status-badge::before { content: ''; width: 6px; height: 6px; background: #30d158; border-radius: 50%; box-shadow: 0 0 10px #30d158; }
 
-    /* Идеальный скролл без обрезания справа */
     .cats { 
       display: flex; gap: 8px; overflow-x: auto; 
       padding: 6px 20px 10px 0; 
@@ -81,6 +80,7 @@
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 22px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+      cursor: pointer;
       animation: cardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -108,7 +108,6 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
     .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
     
-    /* Идеально выровненный по центру счетчик */
     .counter { 
       display: flex; align-items: center; justify-content: center; gap: 2px; 
       background: rgba(255,255,255,0.06); border-radius: 12px; padding: 2px; 
@@ -145,7 +144,7 @@
     }
 
     .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       display: none; align-items: flex-end; z-index: 20;
       animation: fadeIn 0.25s ease;
@@ -158,6 +157,7 @@
       border-radius: 30px 30px 0 0; padding: 26px 18px 40px;
       box-shadow: 0 -25px 60px rgba(0,0,0,0.9);
       animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh; overflow-y: auto;
     }
 
     @keyframes modalSlide {
@@ -165,7 +165,11 @@
       to { transform: translateY(0); }
     }
 
-    .modal h2 { font-size: 19px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.3px; }
+    .modal h2 { font-size: 20px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.3px; }
+    .modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 20px; margin-bottom: 16px; background: #1a1824; }
+    .modal-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+    .modal-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+    .modal-price { font-size: 20px; font-weight: 800; }
     
     .input {
       width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
@@ -195,19 +199,27 @@
   <div class="cats" id="cats"></div>
   <div class="grid" id="catalog"></div>
 
-  <div class="cart-bar" id="cartBar" onclick="openModal()">
+  <div class="cart-bar" id="cartBar" onclick="openCheckoutModal()">
     <span id="cartText">Корзина: 0 ₸</span>
     <span>Оформить заказ →</span>
   </div>
 
-  <div class="modal-bg" id="modalBg">
-    <div class="modal">
+  <!-- Модальное окно деталей товара -->
+  <div class="modal-bg" id="itemModalBg" onclick="closeItemModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div id="itemModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно оформления заказа -->
+  <div class="modal-bg" id="checkoutModalBg" onclick="closeCheckoutModal()">
+    <div class="modal" onclick="event.stopPropagation()">
       <h2>Оформление заказа</h2>
       <input class="input" id="userName" placeholder="Ваше имя">
       <input class="input" id="userPhone" type="tel" placeholder="Телефон для Kaspi Gold">
       <input class="input" id="userAddr" placeholder="Адрес доставки (улица, дом, кв)">
       <button class="submit-btn" onclick="sendOrder()">🔴 Оплатить через Kaspi.kz</button>
-      <div class="close-btn" onclick="closeModal()">Вернуться к меню</div>
+      <div class="close-btn" onclick="closeCheckoutModal()">Вернуться к меню</div>
     </div>
   </div>
 
@@ -218,12 +230,42 @@
     const OWNER_WHATSAPP = "77001234567"; 
 
     const items = [
-      { id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", desc: "Мраморная говядина, картофель фри, фирменный секретный соус", price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" },
-      { id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", desc: "Две сочные котлеты, двойной чеддер, острый халапеньо", price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" },
-      { id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", desc: "Хрустящая корочка в глазури BBQ, соус ранч", price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" },
-      { id: 4, cat: "Комбо", name: "Комбо На двоих", desc: "2 фирменных донера, 2 порции фри, 2 колы 0.5л", price: 5490, img: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80" },
-      { id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", desc: "Булочка бриошь, трюфельный айоли, луковый конфитюр", price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" },
-      { id: 6, cat: "Донеры", name: "Сырный Донер Микс", desc: "Курица и говядина под расплавленным чеддером", price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" }
+      { 
+        id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", 
+        desc: "Мраморная говядина, картофель фри, фирменный секретный соус", 
+        fullDesc: "👑 Флагманский сочный донер повышенного объема. Состав: нежнейшая мраморная говядина обжаренная на вертеле, хрустящий картофель фри, фирменный чесночно-белый соус, свежие томаты и хрустящий салат айсберг в тонком армянском лаваше. Вес: 480 г.", 
+        price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" 
+      },
+      { 
+        id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", 
+        desc: "Две сочные котлеты, двойной чеддер, острый халапеньо", 
+        fullDesc: "🍔 Двойной удар по голоду. Состав: две фирменные говяжьи смэш-котлеты с хрустящей корочкой, двойной расплавленный сыр чеддер, пикантные кольца халапеньо, маринованные огурчики, фирменный соус в обжаренной булочке бриошь. Вес: 390 г.", 
+        price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" 
+      },
+      { 
+        id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", 
+        desc: "Хрустящая корочка в глазури BBQ, соус ранч", 
+        fullDesc: "🔥 Куриные крылышки высшей категории в хрустящей панировке, щедро глазированные в фирменном дымном соусе BBQ. Подаются с прохладным соусом ранч и стеблями сельдерея. Порция: 8 штук (320 г).", 
+        price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" 
+      },
+      { 
+        id: 4, cat: "Комбо", name: "Комбо На двоих", 
+        desc: "2 фирменных донера, 2 порции фри, 2 колы 0.5л", 
+        fullDesc: "🎉 Идеальный сет для компании или плотного обеда вдвоем. В наборе: 2 классических донера с курицей/говядиной на выбор, две большие порции хрустящего картофеля фри с соусом на выбор и две бутылочки Coca-Cola 0.5 л.", 
+        price: 5490, img: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80" 
+      },
+      { 
+        id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", 
+        desc: "Булочка бриошь, трюфельный айоли, луковый конфитюр", 
+        fullDesc: "💎 Премиальный бургер для истинно искушенных. Состав: мраморная говядина, ароматный трюфельный майонез (айоли), карамелизированный луковый конфитюр, сыр моцарелла и швейцарский сыр в мягкой булочке бриошь. Вес: 350 г.", 
+        price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" 
+      },
+      { 
+        id: 6, cat: "Донеры", name: "Сырный Донер Микс", 
+        desc: "Курица и говядина под расплавленным чеддером", 
+        fullDesc: "🧀 Мощный сырный взрыв. Состав: микс нежного куриного филе и сочной говядины, обильно залитый горячим тягучим сырным соусом чеддер, со свежими овощами в хрустящем лаваше. Вес: 460 г.", 
+        price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" 
+      }
     ];
 
     const categories = ["Все", "Донеры", "Бургеры", "Комбо", "Закуски"];
@@ -248,7 +290,7 @@
       document.getElementById('catalog').innerHTML = filtered.map(item => {
         const q = cart[item.id] || 0;
         return `
-        <div class="card">
+        <div class="card" onclick="openItemModal(${item.id})">
           <div>
             <div class="food-img-wrap">
               <img class="food-img" src="${item.img}" loading="lazy">
@@ -256,7 +298,7 @@
             <div class="title">${item.name}</div>
             <div class="desc">${item.desc}</div>
           </div>
-          <div class="price-row">
+          <div class="price-row" onclick="event.stopPropagation()">
             <span class="price">${item.price} ₸</span>
             ${q === 0 ? 
               `<button class="btn" onclick="mod(${item.id}, 1)">+</button>` :
@@ -270,6 +312,36 @@
         </div>`;
       }).join('');
       updateCart();
+    }
+
+    function openItemModal(id) {
+      const item = items.find(i => i.id == id);
+      if (!item) return;
+      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+      const q = cart[item.id] || 0;
+      document.getElementById('itemModalContent').innerHTML = `
+        <img class="modal-img" src="${item.img}">
+        <h2>${item.name}</h2>
+        <div class="modal-desc">${item.fullDesc}</div>
+        <div class="modal-footer">
+          <span class="modal-price">${item.price} ₸</span>
+          ${q === 0 ? 
+            `<button class="submit-btn" style="width: auto; padding: 12px 24px; margin: 0;" onclick="mod(${item.id}, 1); openItemModal(${item.id});">В корзину</button>` :
+            `<div class="counter" style="height: 40px; gap: 6px; padding: 4px;">
+              <button class="btn minus" style="width: 32px; height: 32px;" onclick="mod(${item.id}, -1); openItemModal(${item.id});">−</button>
+              <span class="qty" style="font-size: 14px; width: 24px;">${q}</span>
+              <button class="btn" style="width: 32px; height: 32px;" onclick="mod(${item.id}, 1); openItemModal(${item.id});">+${q > 0 ? '' : ''}</button>
+            </div>`
+          }
+        </div>
+        <div class="close-btn" onclick="closeItemModal()">Закрыть</div>
+      `;
+      document.getElementById('itemModalBg').style.display = 'flex';
+    }
+
+    function closeItemModal() {
+      document.getElementById('itemModalBg').style.display = 'none';
     }
 
     function mod(id, delta) {
@@ -299,13 +371,13 @@
       }
     }
 
-    function openModal() {
+    function openCheckoutModal() {
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-      document.getElementById('modalBg').style.display = 'flex';
+      document.getElementById('checkoutModalBg').style.display = 'flex';
     }
 
-    function closeModal() {
-      document.getElementById('modalBg').style.display = 'none';
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModalBg').style.display = 'none';
     }
 
     function sendOrder() {
