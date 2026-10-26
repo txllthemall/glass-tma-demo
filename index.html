@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Street Food Elite</title>
+  <title>Samurai Sushi & Pizza</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-base: #07070a;
-      --card-bg: #121216;
-      --card-bg-hover: #18181e;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-active: rgba(255, 94, 58, 0.6);
-      --accent: #ff5e3a;
-      --accent-gradient: linear-gradient(135deg, #ff5e3a 0%, #ff2a5f 100%);
-      --text-main: #ffffff;
-      --text-muted: #98989f;
+      --bg-base: #f7f7f9;
+      --card-bg: #ffffff;
+      --card-border: rgba(230, 0, 0, 0.18);
+      --card-border-active: #e60000;
+      --accent: #e60000;
+      --accent-gradient: linear-gradient(135deg, #ff2a2a 0%, #b30000 100%);
+      --text-main: #111111;
+      --text-muted: #66666c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -26,31 +25,31 @@
       min-height: 100vh;
       padding: 16px 14px 110px;
     }
-    body.modal-open {
-      overflow: hidden;
-    }
+    body.modal-open { overflow: hidden; }
 
+    /* ХЕДЕР С БРЕНДИНГОМ */
     .header {
       background: var(--card-bg); 
       border: 1px solid var(--card-border);
       border-radius: 22px; 
-      padding: 18px; 
+      padding: 16px 18px; 
       margin-bottom: 16px;
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
-    .header h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; }
-    .header p { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { width: 42px; height: 42px; border-radius: 12px; object-fit: cover; background: #1a1a22; border: 1px solid var(--card-border); }
+    .header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: var(--text-main); }
+    .header p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
     
-    .status-badge { 
-      background: rgba(48, 209, 88, 0.12); color: #30d158; 
-      border: 1px solid rgba(48, 209, 88, 0.25); font-size: 11px; font-weight: 600; 
-      padding: 6px 12px; border-radius: 14px; display: flex; align-items: center; gap: 6px;
+    .menu-btn {
+      background: #f0f0f4; border: 1px solid var(--card-border);
+      width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-main); font-size: 18px; transition: transform 0.15s ease;
     }
-    .status-badge::before { content: ''; width: 6px; height: 6px; background: #30d158; border-radius: 50%; box-shadow: 0 0 10px #30d158; }
+    .menu-btn:active { transform: scale(0.9); }
 
+    /* КАТЕГОРИИ */
     .cats { 
       display: flex; gap: 8px; overflow-x: auto; 
       padding: 6px 20px 10px 0; 
@@ -60,128 +59,117 @@
     .cats::-webkit-scrollbar { display: none; }
     
     .cat-btn {
-      background: var(--card-bg); 
-      border: 1px solid var(--card-border);
-      color: var(--text-muted); 
-      padding: 10px 18px; 
-      border-radius: 16px; 
-      font-size: 13px; 
-      font-weight: 600; 
-      white-space: nowrap; 
-      cursor: pointer;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 10px 18px; border-radius: 16px; 
+      font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;
       transition: all 0.2s ease;
     }
     .cat-btn:active { transform: scale(0.95); }
     .cat-btn.active { 
-      background: var(--accent-gradient); 
-      color: #fff; 
-      border-color: rgba(255,255,255,0.3); 
-      box-shadow: 0 6px 20px rgba(255, 94, 58, 0.4);
+      background: var(--accent-gradient); color: #fff; 
+      border-color: #e60000; 
+      box-shadow: 0 6px 20px rgba(230, 0, 0, 0.3);
     }
 
+    /* КАТАЛОГ ТОВАРОВ С КРАСНОЙ ОБВОДКОЙ */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
     .card {
-      background: var(--card-bg); 
-      border: 1px solid var(--card-border);
-      border-radius: 20px; 
-      padding: 10px; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: space-between;
-      cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      background: var(--card-bg); border: 1.5px solid var(--card-border);
+      border-radius: 20px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+      cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
     .card.hidden { display: none !important; }
-    .card:active { transform: scale(0.96); border-color: var(--card-border-active); }
+    .card:active { transform: scale(0.96); border-color: var(--card-border-active); box-shadow: 0 6px 20px rgba(230,0,0,0.15); }
 
-    .food-img-wrap { width: 100%; height: 115px; border-radius: 14px; overflow: hidden; margin-bottom: 9px; background: #18181f; }
+    .food-img-wrap { width: 100%; height: 115px; border-radius: 14px; overflow: hidden; margin-bottom: 9px; background: #eee; }
     .food-img { width: 100%; height: 100%; object-fit: cover; }
 
-    .title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; letter-spacing: -0.2px; }
+    .title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; color: var(--text-main); letter-spacing: -0.2px; }
     .desc { font-size: 10.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
-    .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
+    .price { font-weight: 800; font-size: 14.5px; color: var(--text-main); letter-spacing: -0.3px; }
     
     .counter { 
-      display: grid; 
-      grid-template-columns: 32px 24px 32px; 
-      align-items: center; 
-      justify-items: center;
-      background: #1a1a22; 
-      border-radius: 12px; 
-      border: 1px solid rgba(255,255,255,0.12); 
-      height: 34px; 
-      padding: 0 2px;
+      display: grid; grid-template-columns: 32px 24px 32px; align-items: center; justify-items: center;
+      background: #f5f5f7; border-radius: 12px; border: 1px solid var(--card-border); height: 34px; padding: 0 2px;
     }
     .btn { 
       background: var(--accent-gradient); border: none; color: #fff; 
       width: 28px; height: 28px; border-radius: 9px; font-weight: 700; 
-      font-size: 15px; cursor: pointer; display: flex; align-items: center; 
-      justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.4); 
-      transition: transform 0.1s ease; 
+      font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+      box-shadow: 0 4px 12px rgba(230,0,0,0.3); transition: transform 0.1s ease; 
     }
     .btn:active { transform: scale(0.8); }
     .btn.minus { background: transparent; box-shadow: none; color: var(--text-main); }
-    
-    .qty { 
-      font-size: 13px; 
-      font-weight: 700; 
-      text-align: center; 
-      width: 100%;
-    }
+    .qty { font-size: 13px; font-weight: 700; text-align: center; width: 100%; color: var(--text-main); }
 
+    /* ПЛАВАЮЩАЯ КОРЗИНА */
     .cart-bar {
       position: fixed; bottom: 16px; left: 14px; right: 14px;
-      background: linear-gradient(135deg, #ff5e3a, #ff2a5f); 
-      border: 1px solid rgba(255,255,255,0.4);
+      background: linear-gradient(135deg, #e60000, #990000); 
+      border: 1px solid rgba(255,255,255,0.3);
       padding: 16px 20px; border-radius: 20px; display: none; justify-content: space-between; align-items: center;
-      font-weight: 700; box-shadow: 0 16px 40px rgba(255, 94, 58, 0.5); cursor: pointer; z-index: 10;
+      color: #fff; font-weight: 700; box-shadow: 0 16px 40px rgba(230, 0, 0, 0.4); cursor: pointer; z-index: 10;
     }
 
+    /* МОДАЛЬНЫЕ ОКНА */
     .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       display: none; align-items: flex-end; z-index: 20;
     }
-
     .modal {
-      width: 100%; background: #121217; border-top: 1px solid rgba(255,255,255,0.15);
+      width: 100%; background: #ffffff; border-top: 1px solid var(--card-border);
       border-radius: 28px 28px 0 0; padding: 26px 18px 40px;
-      box-shadow: 0 -25px 60px rgba(0,0,0,0.9);
-      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 -25px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: var(--text-main);
     }
-
     .modal h2 { font-size: 20px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.3px; }
-    .modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 18px; margin-bottom: 16px; background: #1a1a22; }
+    .modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 18px; margin-bottom: 16px; background: #eee; }
     .modal-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
     .modal-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
     .modal-price { font-size: 20px; font-weight: 800; }
     
     .input {
-      width: 100%; background: #18181f; border: 1px solid rgba(255,255,255,0.1);
-      color: #fff; padding: 14px 16px; border-radius: 16px; margin-bottom: 11px; font-size: 14px; outline: none;
+      width: 100%; background: #f5f5f7; border: 1px solid var(--card-border);
+      color: var(--text-main); padding: 14px 16px; border-radius: 16px; margin-bottom: 11px; font-size: 14px; outline: none;
       transition: border-color 0.2s ease;
     }
-    .input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,94,58,0.2); }
+    .input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(230,0,0,0.15); }
 
     .submit-btn {
       width: 100%; background: var(--accent-gradient); color: #fff; border: none;
       padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; margin-top: 6px; cursor: pointer;
-      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.15s ease;
+      box-shadow: 0 10px 30px rgba(230, 0, 0, 0.35); transition: transform 0.15s ease;
     }
     .submit-btn:active { transform: scale(0.96); }
     .close-btn { color: var(--text-muted); text-align: center; margin-top: 14px; font-size: 13px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
-    .close-btn:hover { color: #fff; }
+    .close-btn:hover { color: var(--text-main); }
+
+    /* БОКОВОЕ МЕНЮ */
+    .menu-item {
+      padding: 14px 16px; background: #f5f5f7; border: 1px solid var(--card-border);
+      border-radius: 14px; margin-bottom: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; color: var(--text-main);
+    }
+    .menu-item:active { background: #eeeeef; }
+    .faq-question { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: var(--text-main); }
+    .faq-answer { font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.4; }
   </style>
 </head>
 <body>
+
+  <!-- ХЕДЕР -->
   <div class="header">
-    <div>
-      <h1>🔥 Street Food Elite</h1>
-      <p>Премиум доставка • Алматы</p>
+    <div class="header-left">
+      <img class="brand-logo" id="brandLogo" src="" alt="Logo">
+      <div>
+        <h1 id="brandName">Загрузка...</h1>
+        <p id="brandTagline">Суши и Пицца • Алматы</p>
+      </div>
     </div>
-    <div class="status-badge">Открыто</div>
+    <div class="menu-btn" onclick="openMenuModal()">☰</div>
   </div>
 
   <div class="cats" id="cats"></div>
@@ -192,22 +180,59 @@
     <span>Оформить заказ →</span>
   </div>
 
-  <!-- Модальное окно товара -->
+  <!-- МОДАЛКА: ТОВАР -->
   <div class="modal-bg" id="itemModalBg" onclick="closeItemModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <div id="itemModalContent"></div>
     </div>
   </div>
 
-  <!-- Модальное окно заказа -->
+  <!-- МОДАЛКА: ОФОРМЛЕНИЕ ЗАКАЗА -->
   <div class="modal-bg" id="checkoutModalBg" onclick="closeCheckoutModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <h2>Оформление заказа</h2>
       <input class="input" id="userName" placeholder="Ваше имя">
       <input class="input" id="userPhone" type="tel" placeholder="Телефон для Kaspi Gold">
       <input class="input" id="userAddr" placeholder="Адрес доставки (улица, дом, кв)">
-      <button class="submit-btn" onclick="sendOrder()">🔴 Оплатить через Kaspi.kz</button>
+      <button class="submit-btn" onclick="sendOrder()">🔴 Заказать через WhatsApp</button>
       <div class="close-btn" onclick="closeCheckoutModal()">Вернуться к меню</div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО: БОКОВОЕ МЕНЮ -->
+  <div class="modal-bg" id="menuModalBg" onclick="closeMenuModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2>Информация</h2>
+      <div class="modal-desc" style="margin-bottom: 16px;">Информация о доставке, контакты и меню.</div>
+      
+      <div class="menu-item" onclick="openFaqModal()">
+        <span>❓ Частые вопросы (FAQ)</span>
+        <span>→</span>
+      </div>
+      <div class="menu-item" onclick="openContactsModal()">
+        <span>📍 Контакты и соцсети</span>
+        <span>→</span>
+      </div>
+      
+      <div class="close-btn" onclick="closeMenuModal()" style="margin-top: 20px;">Закрыть меню</div>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА: FAQ -->
+  <div class="modal-bg" id="faqModalBg" onclick="closeFaqModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2>Частые вопросы</h2>
+      <div style="margin-top: 14px;" id="faqList"></div>
+      <div class="close-btn" onclick="closeFaqModal()">Назад</div>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА: КОНТАКТЫ -->
+  <div class="modal-bg" id="contactsModalBg" onclick="closeContactsModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2>Контакты</h2>
+      <div class="modal-desc" id="contactsContent"></div>
+      <div class="close-btn" onclick="closeContactsModal()">Назад</div>
     </div>
   </div>
 
@@ -215,48 +240,78 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    const OWNER_WHATSAPP = "77001234567"; 
+    // КОНФИГУРАЦИЯ САМУРАЙ СУШИ & ПИЦЦА
+    const CONFIG = {
+      storeName: "Samurai Sushi & Pizza",
+      tagline: "Японская и итальянская кухня",
+      logoUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&q=80",
+      whatsapp: "77001234567",
+      instagram: "instagram.com/samurai.almaty",
+      address: "ул. Желтоксан 120",
+      workHours: "Ежедневно с 11:00 до 23:00",
+      faq: [
+        { q: "Какая минимальная сумма заказа?", a: "Минимальная сумма заказа для бесплатной доставки по городу составляет 5000 ₸." },
+        { q: "Как оплатить заказ?", a: "Перевод на Kaspi Gold по номеру или Kaspi QR при получении курьеру." },
+        { q: "Сколько готовится заказ?", a: "Свежие роллы и горячая пицца доставляются в среднем за 45-55 минут." }
+      ]
+    };
+
+    document.getElementById('brandName').innerText = CONFIG.storeName;
+    document.getElementById('brandTagline').innerText = CONFIG.tagline;
+    document.getElementById('brandLogo').src = CONFIG.logoUrl;
+
+    document.getElementById('faqList').innerHTML = CONFIG.faq.map(item => `
+      <div class="faq-question">${item.q}</div>
+      <div class="faq-answer">${item.a}</div>
+    `).join('');
+
+    document.getElementById('contactsContent').innerHTML = `
+      📍 <b>Адрес:</b> ${CONFIG.address}<br><br>
+      ⏰ <b>График работы:</b> ${CONFIG.workHours}<br><br>
+      📸 <b>Instagram:</b> <a href="https://${CONFIG.instagram}" target="_blank" style="color: var(--accent);">${CONFIG.instagram}</a><br><br>
+      📞 <b>WhatsApp:</b> +${CONFIG.whatsapp}
+    `;
 
     const items = [
       { 
-        id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", 
-        desc: "Мраморная говядина, картофель фри, фирменный секретный соус", 
-        fullDesc: "👑 Флагманский сочный донер повышенного объема. Состав: нежнейшая мраморная говядина обжаренная на вертеле, хрустящий картофель фри, фирменный чесночно-белый соус, свежие томаты и хрустящий салат айсберг в тонком армянском лаваше. Вес: 480 г.", 
-        price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" 
+        id: 1, cat: "Роллы", name: "Филадельфия Классик", 
+        desc: "Нежнейший лосось, сливочный сыр крем-чиз, огурец, рис", 
+        fullDesc: "🍱 Легендарный ролл с большим количеством охлажденного норвежского лосося, творожным сыром премиум-качества и свежим хрустящим огурцом. В порции 8 штук (260 г).", 
+        price: 2890, img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500&q=80" 
       },
       { 
-        id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", 
-        desc: "Две сочные котлеты, двойной чеддер, острый халапеньо", 
-        fullDesc: "🍔 Двойной удар по голоду. Состав: две фирменные говяжьи смэш-котлеты с хрустящей корочкой, двойной расплавленный сыр чеддер, пикантные кольца халапеньо, маринованные огурчики, фирменный соус в обжаренной булочке бриошь. Вес: 390 г.", 
-        price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" 
+        id: 2, cat: "Пицца", name: "Пепперони Самурай", 
+        desc: "Пикантная колбаса пепперони, моцарелла, фирменный томатный соус", 
+        fullDesc: "🍕 Классическая итальянская пицца на тонком тесте с хрустящей корочкой. Двойная порция острой колбасы пепперони, тягучий сыр моцарелла и фирменный соус из спелых томатов. Вес: 520 г.", 
+        price: 3690, img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80" 
       },
       { 
-        id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", 
-        desc: "Хрустящая корочка в глазури BBQ, соус ранч", 
-        fullDesc: "🔥 Куриные крылышки высшей категории в хрустящей панировке, щедро глазированные в фирменном дымном соусе BBQ. Подаются с прохладным соусом ранч и стеблями сельдерея. Порция: 8 штук (320 г).", 
-        price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" 
+        id: 3, cat: "Сеты", name: "Сет «Самурай»", 
+        desc: "Филадельфия, Калифорния, Дракон, 24 штуки", 
+        fullDesc: "🔥 Сбалансированный набор для компании. В составе: Филадельфия с лососем, Калифорния в кунжуте и запеченный ролл Дракон с угрем. Всего 24 ролла (850 г).", 
+        price: 7990, img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&q=80" 
       },
       { 
-        id: 4, cat: "Комбо", name: "Комбо На двоих", 
-        desc: "2 фирменных донера, 2 порции фри, 2 колы 0.5л", 
-        fullDesc: "🎉 Идеальный сет для компании или плотного обеда вдвоем. В наборе: 2 классических донера с курицей/говядиной на выбор, две большие порции хрустящего картофеля фри с соусом на выбор и две бутылочки Coca-Cola 0.5 л.", 
-        price: 5490, img: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80" 
+        id: 4, cat: "Пицца", name: "Пицца Четыре Сыра", 
+        desc: "Моцарелла, дорблю, пармезан, чеддер, сливочный соус", 
+        fullDesc: "🧀 Насыщенный сырный вкус для истинных гурманов. Сливочная основа, тягучая моцарелла, пикантный сыр с плесенью дорблю, выдержанный пармезан и золотистый чеддер. Вес: 480 г.", 
+        price: 3890, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80" 
       },
       { 
-        id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", 
-        desc: "Булочка бриошь, трюфельный айоли, луковый конфитюр", 
-        fullDesc: "💎 Премиальный бургер для истинно искушенных. Состав: мраморная говядина, ароматный трюфельный майонез (айоли), карамелизированный луковый конфитюр, сыр моцарелла и швейцарский сыр в мягкой булочке бриошь. Вес: 350 г.", 
-        price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" 
+        id: 5, cat: "Роллы", name: "Запеченный с угрем", 
+        desc: "Копченый угорь, соус унаги, кунжут, сырная шапочка", 
+        fullDesc: "🔥 Горячий запеченный ролл под фирменной сочной сырной шапкой, с нежным копченым угрем, авокадо и сладким соусом унаги. Порция: 8 штук (280 г).", 
+        price: 3290, img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80" 
       },
       { 
-        id: 6, cat: "Донеры", name: "Сырный Донер Микс", 
-        desc: "Курица и говядина под расплавленным чеддером", 
-        fullDesc: "🧀 Мощный сырный взрыв. Состав: микс нежного куриного филе и сочной говядины, обильно залитый горячим тягучим сырным соусом чеддер, со свежими овощами в хрустящем лаваше. Вес: 460 г.", 
-        price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" 
+        id: 6, cat: "Напитки", name: "Coca-Cola 0.5л", 
+        desc: "Освежающий газированный напиток", 
+        fullDesc: "🥤 Классическая ледяная Coca-Cola в пластиковой бутылке 0.5 л.", 
+        price: 450, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80" 
       }
     ];
 
-    const categories = ["Все", "Донеры", "Бургеры", "Комбо", "Закуски"];
+    const categories = ["Все", "Роллы", "Пицца", "Сеты", "Напитки"];
     let activeCat = "Все";
     let cart = {};
 
@@ -325,7 +380,6 @@
 
     function updateCardNode(id) {
       const q = cart[id] || 0;
-      
       const counterWrap = document.getElementById(`counter-${id}`);
       if (counterWrap) {
         counterWrap.innerHTML = getCounterHTML(id, q);
@@ -369,6 +423,36 @@
       document.getElementById('itemModalBg').style.display = 'none';
     }
 
+    function openMenuModal() {
+      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+      document.body.classList.add('modal-open');
+      document.getElementById('menuModalBg').style.display = 'flex';
+    }
+    function closeMenuModal() {
+      document.body.classList.remove('modal-open');
+      document.getElementById('menuModalBg').style.display = 'none';
+    }
+
+    function openFaqModal() {
+      closeMenuModal();
+      document.body.classList.add('modal-open');
+      document.getElementById('faqModalBg').style.display = 'flex';
+    }
+    function closeFaqModal() {
+      document.getElementById('faqModalBg').style.display = 'none';
+      openMenuModal();
+    }
+
+    function openContactsModal() {
+      closeMenuModal();
+      document.body.classList.add('modal-open');
+      document.getElementById('contactsModalBg').style.display = 'flex';
+    }
+    function closeContactsModal() {
+      document.getElementById('contactsModalBg').style.display = 'none';
+      openMenuModal();
+    }
+
     function mod(id, delta) {
       cart[id] = (cart[id] || 0) + delta;
       if (cart[id] <= 0) delete cart[id];
@@ -381,57 +465,4 @@
     function getTotal() {
       let total = 0;
       for (let id in cart) {
-        const item = items.find(i => i.id == id);
-        if (item) total += item.price * cart[id];
-      }
-      return total;
-    }
-
-    function updateCart() {
-      const total = getTotal();
-      const bar = document.getElementById('cartBar');
-      if (total > 0) {
-        bar.style.display = 'flex';
-        document.getElementById('cartText').innerText = `Итого: ${total} ₸`;
-      } else {
-        bar.style.display = 'none';
-      }
-    }
-
-    function openCheckoutModal() {
-      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-      document.body.classList.add('modal-open');
-      document.getElementById('checkoutModalBg').style.display = 'flex';
-    }
-
-    function closeCheckoutModal() {
-      document.body.classList.remove('modal-open');
-      document.getElementById('checkoutModalBg').style.display = 'none';
-    }
-
-    function sendOrder() {
-      const name = document.getElementById('userName').value.trim() || "Клиент";
-      const phone = document.getElementById('userPhone').value.trim();
-      const addr = document.getElementById('userAddr').value.trim();
-      if (!phone || !addr) {
-        tg.showAlert("Укажите телефон и адрес для оформления заказа!");
-        return;
-      }
-      let lines = [`🔥 *ЗАКАЗ ИЗ МИНИ-ПРИЛОЖЕНИЯ*`];
-      for (let id in cart) {
-        const item = items.find(i => i.id == id);
-        lines.push(`• ${item.name} x${cart[id]} = ${item.price * cart[id]} ₸`);
-      }
-      lines.push(`\n💰 *Сумма:* ${getTotal()} ₸`);
-      lines.push(`👤 *Имя:* ${name}`);
-      lines.push(`📱 *Телефон:* ${phone}`);
-      lines.push(`📍 *Адрес:* ${addr}`);
-
-      const text = encodeURIComponent(lines.join('\n'));
-      tg.openLink(`https://wa.me/${OWNER_WHATSAPP}?text=${text}`);
-    }
-
-    initApp();
-  </script>
-</body>
-</html>
+        const item = items.
