@@ -7,9 +7,10 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-base: #050508;
-      --card-bg: rgba(255, 255, 255, 0.045);
-      --card-border: rgba(255, 255, 255, 0.09);
+      --bg-base: #07070a;
+      --card-bg: #121216;
+      --card-bg-hover: #18181e;
+      --card-border: rgba(255, 255, 255, 0.08);
       --card-border-active: rgba(255, 94, 58, 0.6);
       --accent: #ff5e3a;
       --accent-gradient: linear-gradient(135deg, #ff5e3a 0%, #ff2a5f 100%);
@@ -21,20 +22,24 @@
     
     body {
       background-color: var(--bg-base);
-      background-image: 
-        radial-gradient(circle at 20% 0%, rgba(255, 94, 58, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 80% 100%, rgba(120, 40, 180, 0.1) 0%, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
       padding: 16px 14px 110px;
     }
+    body.modal-open {
+      overflow: hidden;
+    }
 
     .header {
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 22px; padding: 18px; margin-bottom: 16px;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      background: var(--card-bg); 
+      border: 1px solid var(--card-border);
+      border-radius: 22px; 
+      padding: 18px; 
+      margin-bottom: 16px;
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .header h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; }
     .header p { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
@@ -55,33 +60,42 @@
     .cats::-webkit-scrollbar { display: none; }
     
     .cat-btn {
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 10px 18px; border-radius: 16px; 
-      font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;
-      transition: all 0.25s ease;
+      background: var(--card-bg); 
+      border: 1px solid var(--card-border);
+      color: var(--text-muted); 
+      padding: 10px 18px; 
+      border-radius: 16px; 
+      font-size: 13px; 
+      font-weight: 600; 
+      white-space: nowrap; 
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .cat-btn:active { transform: scale(0.92); }
+    .cat-btn:active { transform: scale(0.95); }
     .cat-btn.active { 
-      background: var(--accent-gradient); color: #fff; 
+      background: var(--accent-gradient); 
+      color: #fff; 
       border-color: rgba(255,255,255,0.3); 
       box-shadow: 0 6px 20px rgba(255, 94, 58, 0.4);
-      transform: translateY(-1px);
     }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
     .card {
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--card-bg); 
+      border: 1px solid var(--card-border);
+      border-radius: 20px; 
+      padding: 10px; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between;
       cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+      transition: transform 0.15s ease, border-color 0.15s ease;
     }
     .card.hidden { display: none !important; }
     .card:active { transform: scale(0.96); border-color: var(--card-border-active); }
 
-    .food-img-wrap { width: 100%; height: 115px; border-radius: 14px; overflow: hidden; margin-bottom: 9px; background: #121216; position: relative; }
+    .food-img-wrap { width: 100%; height: 115px; border-radius: 14px; overflow: hidden; margin-bottom: 9px; background: #18181f; }
     .food-img { width: 100%; height: 100%; object-fit: cover; }
 
     .title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; letter-spacing: -0.2px; }
@@ -90,15 +104,14 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
     .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
     
-    /* ИДЕАЛЬНЫЙ CENTERING ЧЕРЕЗ CSS GRID (3 КОЛОНКИ: МИНУС, ЦИФРА, ПЛЮС) */
     .counter { 
       display: grid; 
       grid-template-columns: 32px 24px 32px; 
       align-items: center; 
       justify-items: center;
-      background: rgba(255,255,255,0.07); 
+      background: #1a1a22; 
       border-radius: 12px; 
-      border: 1px solid rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.12); 
       height: 34px; 
       padding: 0 2px;
     }
@@ -121,43 +134,41 @@
 
     .cart-bar {
       position: fixed; bottom: 16px; left: 14px; right: 14px;
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      background: linear-gradient(135deg, rgba(255, 94, 58, 0.95), rgba(255, 42, 95, 0.95)); 
-      border: 1px solid rgba(255,255,255,0.35);
+      background: linear-gradient(135deg, #ff5e3a, #ff2a5f); 
+      border: 1px solid rgba(255,255,255,0.4);
       padding: 16px 20px; border-radius: 20px; display: none; justify-content: space-between; align-items: center;
       font-weight: 700; box-shadow: 0 16px 40px rgba(255, 94, 58, 0.5); cursor: pointer; z-index: 10;
     }
 
     .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
       display: none; align-items: flex-end; z-index: 20;
     }
 
     .modal {
-      width: 100%; background: #0d0d12; border-top: 1px solid rgba(255,255,255,0.12);
+      width: 100%; background: #121217; border-top: 1px solid rgba(255,255,255,0.15);
       border-radius: 28px 28px 0 0; padding: 26px 18px 40px;
       box-shadow: 0 -25px 60px rgba(0,0,0,0.9);
       max-height: 90vh; overflow-y: auto;
     }
 
     .modal h2 { font-size: 20px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.3px; }
-    .modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 18px; margin-bottom: 16px; background: #14141a; }
+    .modal-img { width: 100%; height: 200px; object-fit: cover; border-radius: 18px; margin-bottom: 16px; background: #1a1a22; }
     .modal-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
     .modal-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
     .modal-price { font-size: 20px; font-weight: 800; }
     
     .input {
-      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+      width: 100%; background: #18181f; border: 1px solid rgba(255,255,255,0.1);
       color: #fff; padding: 14px 16px; border-radius: 16px; margin-bottom: 11px; font-size: 14px; outline: none;
-      transition: all 0.25s ease;
+      transition: border-color 0.2s ease;
     }
-    .input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(255,94,58,0.2); }
+    .input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,94,58,0.2); }
 
     .submit-btn {
       width: 100%; background: var(--accent-gradient); color: #fff; border: none;
       padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; margin-top: 6px; cursor: pointer;
-      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.2s ease;
+      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.15s ease;
     }
     .submit-btn:active { transform: scale(0.96); }
     .close-btn { color: var(--text-muted); text-align: center; margin-top: 14px; font-size: 13px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
@@ -265,7 +276,6 @@
       if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
       renderCats();
       
-      // Мгновенная фильтрация без перерисовки DOM (ноль мерцаний!)
       const cards = document.querySelectorAll('.card');
       cards.forEach(card => {
         const cardCat = card.dataset.category;
@@ -316,13 +326,11 @@
     function updateCardNode(id) {
       const q = cart[id] || 0;
       
-      // Обновляем в каталоге
       const counterWrap = document.getElementById(`counter-${id}`);
       if (counterWrap) {
         counterWrap.innerHTML = getCounterHTML(id, q);
       }
       
-      // Обновляем в модалке, если она открыта для этого товара
       const modalContent = document.getElementById('itemModalContent');
       if (modalContent && modalContent.dataset.itemId == id) {
         const modalFooterRight = modalContent.querySelector('.modal-footer-right');
@@ -352,10 +360,12 @@
         </div>
         <div class="close-btn" onclick="closeItemModal()">Закрыть</div>
       `;
+      document.body.classList.add('modal-open');
       document.getElementById('itemModalBg').style.display = 'flex';
     }
 
     function closeItemModal() {
+      document.body.classList.remove('modal-open');
       document.getElementById('itemModalBg').style.display = 'none';
     }
 
@@ -390,10 +400,12 @@
 
     function openCheckoutModal() {
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+      document.body.classList.add('modal-open');
       document.getElementById('checkoutModalBg').style.display = 'flex';
     }
 
     function closeCheckoutModal() {
+      document.body.classList.remove('modal-open');
       document.getElementById('checkoutModalBg').style.display = 'none';
     }
 
