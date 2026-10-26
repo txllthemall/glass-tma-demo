@@ -3,60 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Street Food Luxury</title>
+  <title>Street Food Elite</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #09090e;
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-active: rgba(255, 94, 58, 0.4);
+      --bg-base: #07070a;
+      --card-bg: rgba(255, 255, 255, 0.035);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-border-active: rgba(255, 94, 58, 0.5);
       --accent: #ff5e3a;
       --accent-gradient: linear-gradient(135deg, #ff5e3a 0%, #ff2a5f 100%);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #ffffff;
+      --text-muted: #8e8e93;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     
     body {
-      background-color: var(--bg);
+      background-color: var(--bg-base);
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(255, 94, 58, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(43, 29, 56, 0.4) 0%, transparent 50%);
+        radial-gradient(circle at 15% 5%, rgba(255, 94, 58, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(110, 40, 160, 0.12) 0%, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
       padding: 16px 14px 110px;
-      animation: fadeInPage 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: pageReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes fadeInPage {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes pageReveal {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .header {
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 24px; padding: 18px; margin-bottom: 16px;
       display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
     }
-    .header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.4px; }
-    .header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .header h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; }
+    .header p { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
     
-    .badge { 
-      background: rgba(34, 197, 94, 0.1); color: #22c55e; 
-      border: 1px solid rgba(34, 197, 94, 0.2); font-size: 11px; font-weight: 600; 
+    .status-badge { 
+      background: rgba(48, 209, 88, 0.12); color: #30d158; 
+      border: 1px solid rgba(48, 209, 88, 0.25); font-size: 11px; font-weight: 600; 
       padding: 6px 12px; border-radius: 14px; display: flex; align-items: center; gap: 6px;
     }
-    .badge::before { content: ''; width: 6px; height: 6px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
+    .status-badge::before { content: ''; width: 6px; height: 6px; background: #30d158; border-radius: 50%; box-shadow: 0 0 10px #30d158; }
 
     .cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; }
     .cats::-webkit-scrollbar { display: none; }
     
     .cat-btn {
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-muted); padding: 9px 18px; border-radius: 16px; 
       font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;
@@ -64,99 +64,99 @@
     }
     .cat-btn.active { 
       background: var(--accent-gradient); color: #fff; 
-      border-color: rgba(255,255,255,0.2); 
-      box-shadow: 0 8px 20px rgba(255,94,58,0.35);
+      border-color: rgba(255,255,255,0.25); 
+      box-shadow: 0 10px 25px rgba(255,94,58,0.4);
       transform: translateY(-1px);
     }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
     .card {
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 22px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
-      animation: cardAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      animation: cardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .card:active { transform: scale(0.97); }
+    .card:active { transform: scale(0.96); border-color: var(--card-border-active); }
     
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes cardPop {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
     
-    .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.15s; }
-    .card:nth-child(4) { animation-delay: 0.2s; }
-    .card:nth-child(5) { animation-delay: 0.25s; }
-    .card:nth-child(6) { animation-delay: 0.3s; }
+    .card:nth-child(1) { animation-delay: 0.04s; }
+    .card:nth-child(2) { animation-delay: 0.08s; }
+    .card:nth-child(3) { animation-delay: 0.12s; }
+    .card:nth-child(4) { animation-delay: 0.16s; }
+    .card:nth-child(5) { animation-delay: 0.20s; }
+    .card:nth-child(6) { animation-delay: 0.24s; }
 
-    .food-img-wrap { width: 100%; height: 110px; border-radius: 16px; overflow: hidden; margin-bottom: 8px; background: #13131a; position: relative; }
-    .food-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-    .card:hover .food-img { transform: scale(1.05); }
+    .food-img-wrap { width: 100%; height: 115px; border-radius: 16px; overflow: hidden; margin-bottom: 9px; background: #121218; position: relative; }
+    .food-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card:hover .food-img { transform: scale(1.06); }
 
-    .title { font-size: 13px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; letter-spacing: -0.2px; }
-    .desc { font-size: 10px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; letter-spacing: -0.2px; }
+    .desc { font-size: 10.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
-    .price { font-weight: 800; font-size: 14px; letter-spacing: -0.3px; }
+    .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
     
-    .counter { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.08); border-radius: 12px; padding: 2px; border: 1px solid rgba(255,255,255,0.05); }
-    .btn { background: var(--accent-gradient); border: none; color: #fff; width: 28px; height: 28px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.3); transition: transform 0.1s ease; }
-    .btn:active { transform: scale(0.9); }
+    .counter { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 2px; border: 1px solid rgba(255,255,255,0.08); }
+    .btn { background: var(--accent-gradient); border: none; color: #fff; width: 28px; height: 28px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.35); transition: transform 0.1s ease; }
+    .btn:active { transform: scale(0.85); }
     .btn.minus { background: transparent; box-shadow: none; color: var(--text-main); }
     .qty { font-size: 12px; font-weight: 700; min-width: 14px; text-align: center; }
 
     .cart-bar {
       position: fixed; bottom: 16px; left: 14px; right: 14px;
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       background: linear-gradient(135deg, rgba(255, 94, 58, 0.95), rgba(255, 42, 95, 0.95)); 
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.3);
       padding: 16px 20px; border-radius: 20px; display: none; justify-content: space-between; align-items: center;
-      font-weight: 700; box-shadow: 0 16px 35px rgba(255, 94, 58, 0.45); cursor: pointer; z-index: 10;
-      animation: bounceUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 700; box-shadow: 0 16px 40px rgba(255, 94, 58, 0.5); cursor: pointer; z-index: 10;
+      animation: barSlide 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes bounceUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes barSlide {
+      from { opacity: 0; transform: translateY(40px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       display: none; align-items: flex-end; z-index: 20;
-      animation: fadeIn 0.2s ease;
+      animation: fadeIn 0.25s ease;
     }
     
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .modal {
-      width: 100%; background: #121218; border-top: 1px solid rgba(255,255,255,0.1);
-      border-radius: 28px 28px 0 0; padding: 24px 18px 36px;
-      box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
-      animation: slideUpModal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%; background: #0e0e13; border-top: 1px solid rgba(255,255,255,0.1);
+      border-radius: 30px 30px 0 0; padding: 26px 18px 40px;
+      box-shadow: 0 -25px 60px rgba(0,0,0,0.9);
+      animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes slideUpModal {
+    @keyframes modalSlide {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
 
-    .modal h2 { font-size: 18px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.3px; }
+    .modal h2 { font-size: 19px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.3px; }
     
     .input {
-      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      color: #fff; padding: 14px 16px; border-radius: 16px; margin-bottom: 10px; font-size: 14px; outline: none;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: #fff; padding: 14px 16px; border-radius: 16px; margin-bottom: 11px; font-size: 14px; outline: none;
+      transition: all 0.2s ease;
     }
-    .input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+    .input:focus { border-color: var(--accent); background: rgba(255,255,255,0.07); box-shadow: 0 0 15px rgba(255,94,58,0.15); }
 
     .submit-btn {
       width: 100%; background: #f14635; color: #fff; border: none;
       padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; margin-top: 6px; cursor: pointer;
-      box-shadow: 0 8px 25px rgba(241, 70, 53, 0.4); transition: transform 0.15s ease;
+      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.15s ease;
     }
     .submit-btn:active { transform: scale(0.98); }
     .close-btn { color: var(--text-muted); text-align: center; margin-top: 14px; font-size: 13px; cursor: pointer; font-weight: 500; }
@@ -165,10 +165,10 @@
 <body>
   <div class="header">
     <div>
-      <h1>🔥 Street Food Luxury</h1>
-      <p>Безупречная доставка • Алматы</p>
+      <h1>🔥 Street Food Elite</h1>
+      <p>Премиум доставка • Алматы</p>
     </div>
-    <div class="badge">Работаем</div>
+    <div class="status-badge">Открыто</div>
   </div>
 
   <div class="cats" id="cats"></div>
@@ -181,7 +181,7 @@
 
   <div class="modal-bg" id="modalBg">
     <div class="modal">
-      <h2>Быстрое оформление</h2>
+      <h2>Оформление заказа</h2>
       <input class="input" id="userName" placeholder="Ваше имя">
       <input class="input" id="userPhone" type="tel" placeholder="Телефон для Kaspi Gold">
       <input class="input" id="userAddr" placeholder="Адрес доставки (улица, дом, кв)">
@@ -197,12 +197,12 @@
     const OWNER_WHATSAPP = "77001234567"; 
 
     const items = [
-      { id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", desc: "Мраморная говядина, хрустящий картофель фри, фирменный соус", price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" },
-      { id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", desc: "Две сочные котлеты, двойной чеддер, маринованный халапеньо", price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" },
-      { id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", desc: "Хрустящая корочка в глазури BBQ, нежный соус ранч", price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" },
+      { id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", desc: "Мраморная говядина, картофель фри, фирменный секретный соус", price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" },
+      { id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", desc: "Две сочные котлеты, двойной чеддер, острый халапеньо", price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" },
+      { id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", desc: "Хрустящая корочка в глазури BBQ, соус ранч", price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" },
       { id: 4, cat: "Комбо", name: "Комбо На двоих", desc: "2 фирменных донера, 2 порции фри, 2 колы 0.5л", price: 5490, img: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80" },
-      { id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", desc: "Бриошь, трюфельный айоли, карамелизированный лук", price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" },
-      { id: 6, cat: "Донеры", name: "Сырный Донер Микс", desc: "Курица и говядина под расплавленным соусом чеддер", price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" }
+      { id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", desc: "Булочка бриошь, трюфельный айоли, луковый конфитюр", price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" },
+      { id: 6, cat: "Донеры", name: "Сырный Донер Микс", desc: "Курица и говядина под расплавленным чеддером", price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" }
     ];
 
     const categories = ["Все", "Донеры", "Бургеры", "Комбо", "Закуски"];
