@@ -228,8 +228,7 @@
       <div class="close-btn" onclick="closeContactsModal()">Назад</div>
     </div>
   </div>
-
-  <script>
+    <script>
     try {
       const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
       if (tg && typeof tg.expand === 'function') {
@@ -442,4 +441,85 @@
       };
 
       window.closeContactsModal = function() {
-        document.getElementById('contactsModa
+        document.getElementById('contactsModalBg').style.display = 'none';
+        openMenuModal();
+      };
+
+      window.mod = function(id, delta) {
+        cart[id] = (cart[id] || 0) + delta;
+        if (cart[id] <= 0) delete cart[id];
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        
+        updateCardNode(id);
+        updateCart();
+      };
+
+      window.getTotal = function() {
+        let total = 0;
+        for (let id in cart) {
+          const item = items.find(i => i.id == id);
+          if (item) total += item.price * cart[id];
+        }
+        return total;
+      };
+
+      window.updateCart = function() {
+        const total = getTotal();
+        const bar = document.getElementById('cartBar');
+        if (total > 0) {
+          bar.style.display = 'flex';
+          document.getElementById('cartText').innerText = `Итого: ${total} ₸`;
+        } else {
+          bar.style.display = 'none';
+        }
+      };
+
+      window.openCheckoutModal = function() {
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        document.body.classList.add('modal-open');
+        document.getElementById('checkoutModalBg').style.display = 'flex';
+      };
+
+      window.closeCheckoutModal = function() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('checkoutModalBg').style.display = 'none';
+      };
+
+      window.sendOrder = function() {
+        const name = document.getElementById('userName').value.trim() || "Клиент";
+        const phone = document.getElementById('userPhone').value.trim();
+        const addr = document.getElementById('userAddr').value.trim();
+        if (!phone || !addr) {
+          if (tg && tg.showAlert) {
+            tg.showAlert("Укажите телефон и адрес для оформления заказа!");
+          } else {
+            alert("Укажите телефон и адрес для оформления заказа!");
+          }
+          return;
+        }
+        let lines = [`🔥 *ЗАКАЗ (${CONFIG.storeName})*`];
+        for (let id in cart) {
+          const item = items.find(i => i.id == id);
+          lines.push(`• ${item.name} x${cart[id]} = ${item.price * cart[id]} ₸`);
+        }
+        lines.push(`\n💰 *Сумма:* ${getTotal()} ₸`);
+        lines.push(`👤 *Имя:* ${name}`);
+        lines.push(`📱 *Телефон:* ${phone}`);
+        lines.push(`📍 *Адрес:* ${addr}`);
+
+        const text = encodeURIComponent(lines.join('\n'));
+        if (tg && tg.openLink) {
+          tg.openLink(`https://wa.me/${CONFIG.whatsapp}?text=${text}`);
+        } else {
+          window.open(`https://wa.me/${CONFIG.whatsapp}?text=${text}`, '_blank');
+        }
+      };
+
+      renderCats();
+      renderCatalogOnce();
+    } catch (err) {
+      console.error("Critical Init Error:", err);
+    }
+  </script>
+</body>
+</html>
