@@ -52,7 +52,7 @@
     }
     .status-badge::before { content: ''; width: 6px; height: 6px; background: #30d158; border-radius: 50%; box-shadow: 0 0 10px #30d158; }
 
-    .cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; }
+    .cats { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 14px 0; scrollbar-width: none; }
     .cats::-webkit-scrollbar { display: none; }
     
     .cat-btn {
@@ -102,11 +102,25 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
     .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
     
-    .counter { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 2px; border: 1px solid rgba(255,255,255,0.08); }
-    .btn { background: var(--accent-gradient); border: none; color: #fff; width: 28px; height: 28px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.35); transition: transform 0.1s ease; }
+    .counter { 
+      display: flex; align-items: center; justify-content: center; gap: 2px; 
+      background: rgba(255,255,255,0.06); border-radius: 12px; padding: 2px; 
+      border: 1px solid rgba(255,255,255,0.08); height: 32px; 
+    }
+    .btn { 
+      background: var(--accent-gradient); border: none; color: #fff; 
+      width: 28px; height: 28px; border-radius: 10px; font-weight: 700; 
+      font-size: 15px; cursor: pointer; display: flex; align-items: center; 
+      justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.35); 
+      transition: transform 0.1s ease; 
+    }
     .btn:active { transform: scale(0.85); }
     .btn.minus { background: transparent; box-shadow: none; color: var(--text-main); }
-    .qty { font-size: 12px; font-weight: 700; min-width: 14px; text-align: center; }
+    .qty { 
+      font-size: 12px; font-weight: 700; width: 20px; 
+      display: flex; align-items: center; justify-content: center; 
+      text-align: center; 
+    }
 
     .cart-bar {
       position: fixed; bottom: 16px; left: 14px; right: 14px;
