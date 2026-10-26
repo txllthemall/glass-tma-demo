@@ -3,155 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Glass Delivery TMA</title>
+  <title>Street Food Glass PRO</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.16);
       --accent: #ff5e3a;
+      --kaspi: #f14635;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body {
-      background: radial-gradient(circle at top left, #1e1b2e, #0d0b14 70%);
+      background: radial-gradient(circle at 20% 0%, #2b1d38, #0b0a10 75%);
       color: #fff;
       min-height: 100vh;
-      padding: 16px 16px 90px;
+      padding: 14px 14px 100px;
     }
     .header {
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 22px; padding: 16px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .header h1 { font-size: 20px; font-weight: 700; }
-    .header p { font-size: 13px; color: #aaa; margin-top: 4px; }
+    .header h1 { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+    .header p { font-size: 12px; color: #aaa; margin-top: 3px; }
+    .badge { background: rgba(46, 213, 115, 0.18); color: #2ed573; border: 1px solid rgba(46,213,115,0.3); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 12px; }
+
+    .cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+    .cats::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      background: var(--glass); border: 1px solid var(--glass-border);
+      color: #ccc; padding: 8px 16px; border-radius: 14px; font-size: 13px; font-weight: 600; white-space: nowrap;
+    }
+    .cat-btn.active { background: var(--accent); color: #fff; border-color: rgba(255,255,255,0.3); box-shadow: 0 4px 15px rgba(255,94,58,0.35); }
+
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .card {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 18px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.15s ease;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
     }
-    .card:active { transform: scale(0.97); }
-    .emoji-img {
-      font-size: 44px;
-      text-align: center;
-      padding: 14px 0;
-      background: rgba(255,255,255,0.03);
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-    .title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .desc { font-size: 11px; color: #999; margin-bottom: 10px; }
-    .price-row { display: flex; justify-content: space-between; align-items: center; }
-    .price { font-weight: 700; font-size: 15px; }
-    .btn {
-      background: var(--accent);
-      border: none;
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    .food-img { width: 100%; height: 115px; object-fit: cover; border-radius: 14px; margin-bottom: 8px; background: #1a1824; }
+    .title { font-size: 14px; font-weight: 700; margin-bottom: 3px; line-height: 1.2; }
+    .desc { font-size: 11px; color: #999; margin-bottom: 10px; line-height: 1.3; }
+    .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .price { font-weight: 800; font-size: 15px; }
+    .counter { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border-radius: 11px; padding: 2px; }
+    .btn { background: var(--accent); border: none; color: #fff; width: 30px; height: 30px; border-radius: 9px; font-weight: 700; font-size: 16px; cursor: pointer; }
+    .btn.minus { background: transparent; }
+    .qty { font-size: 13px; font-weight: 700; min-width: 14px; text-align: center; }
+
     .cart-bar {
-      position: fixed;
-      bottom: 16px; left: 16px; right: 16px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      background: rgba(255, 94, 58, 0.85);
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 16px 20px;
-      border-radius: 18px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      box-shadow: 0 10px 30px rgba(255, 94, 58, 0.4);
-      cursor: pointer;
+      position: fixed; bottom: 16px; left: 14px; right: 14px;
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      background: rgba(255, 94, 58, 0.9); border: 1px solid rgba(255,255,255,0.35);
+      padding: 16px 20px; border-radius: 18px; display: none; justify-content: space-between; align-items: center;
+      font-weight: 700; box-shadow: 0 10px 30px rgba(255, 94, 58, 0.45); cursor: pointer; z-index: 10;
     }
+
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: none; align-items: flex-end; z-index: 20;
+    }
+    .modal {
+      width: 100%; background: #161321; border-top: 1px solid var(--glass-border);
+      border-radius: 26px 26px 0 0; padding: 22px 18px 30px;
+    }
+    .modal h2 { font-size: 18px; margin-bottom: 14px; }
+    .input {
+      width: 100%; background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border);
+      color: #fff; padding: 13px 14px; border-radius: 14px; margin-bottom: 10px; font-size: 14px; outline: none;
+    }
+    .submit-btn {
+      width: 100%; background: var(--kaspi); color: #fff; border: none;
+      padding: 15px; border-radius: 16px; font-size: 15px; font-weight: 800; margin-top: 8px; cursor: pointer;
+    }
+    .close-btn { color: #888; text-align: center; margin-top: 12px; font-size: 13px; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>🔥 Street Food Glass</h1>
-    <p>Доставка за 30 минут • 0% комиссии агрегаторов</p>
+    <div>
+      <h1>🔥 Street Food Glass</h1>
+      <p>Доставка 30 мин • Алматы</p>
+    </div>
+    <div class="badge">Открыто</div>
   </div>
 
+  <div class="cats" id="cats"></div>
   <div class="grid" id="catalog"></div>
 
-  <div class="cart-bar" id="cartBar" onclick="checkout()">
+  <div class="cart-bar" id="cartBar" onclick="openModal()">
     <span id="cartText">Корзина: 0 ₸</span>
-    <span>Оформить →</span>
+    <span>К оплате →</span>
+  </div>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h2>Оформление заказа</h2>
+      <input class="input" id="userName" placeholder="Ваше имя">
+      <input class="input" id="userPhone" type="tel" placeholder="Номер телефона (для счета Kaspi)">
+      <input class="input" id="userAddr" placeholder="Улица, дом, квартира">
+      <button class="submit-btn" onclick="sendOrder()">🔴 Оплатить через Kaspi.kz</button>
+      <div class="close-btn" onclick="closeModal()">Вернуться в меню</div>
+    </div>
   </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // Номер WhatsApp владельца заведения (куда прилетает готовый заказ)
+    const OWNER_WHATSAPP = "77001234567"; 
+
     const items = [
-      { id: 1, name: "Донер в лаваше 1.5x", desc: "Говядина, фирменный соус, фри", price: 2490, icon: "🌯" },
-      { id: 2, name: "Смэш-бургер Дабл", desc: "Две котлеты, чеддер, халапеньо", price: 2890, icon: "🍔" },
-      { id: 3, name: "Крылышки BBQ (8 шт)", desc: "Хрустящая корочка, соус ранч", price: 2190, icon: "🍗" },
-      { id: 4, name: "Комбо На двоих", desc: "2 донера, 2 фри, 2 колы 0.5", price: 5490, icon: "🍟" }
+      { id: 1, cat: "Донеры", name: "Донер Говядина 1.5x", desc: "Мраморная говядина, фри, фирменный соус", price: 2490, img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=500&q=80" },
+      { id: 2, cat: "Бургеры", name: "Смэш-бургер Дабл", desc: "Две котлеты, двойной чеддер, халапеньо", price: 2890, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" },
+      { id: 3, cat: "Закуски", name: "Крылышки BBQ (8 шт)", desc: "Хрустящая панировка, соус ранч", price: 2190, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80" },
+      { id: 4, cat: "Комбо", name: "Комбо На двоих", desc: "2 донера, 2 фри, 2 колы 0.5л", price: 5490, img: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80" },
+      { id: 5, cat: "Бургеры", name: "Трюфельный Чизбургер", desc: "Бриошь, трюфельный айоли, луковый конфитюр", price: 3190, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80" },
+      { id: 6, cat: "Донеры", name: "Сырный Донер Микс", desc: "Курица + говядина, расплавленный чеддер", price: 2690, img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&q=80" }
     ];
 
+    const categories = ["Все", "Донеры", "Бургеры", "Комбо", "Закуски"];
+    let activeCat = "Все";
     let cart = {};
 
-    function render() {
-      const container = document.getElementById('catalog');
-      container.innerHTML = items.map(item => `
+    function renderCats() {
+      document.getElementById('cats').innerHTML = categories.map(c => 
+        `<button class="cat-btn ${c === activeCat ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
+      ).join('');
+    }
+
+    function setCat(c) {
+      activeCat = c;
+      if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      renderCats();
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      const filtered = activeCat === "Все" ? items : items.filter(i => i.cat === activeCat);
+      document.getElementById('catalog').innerHTML = filtered.map(item => {
+        const q = cart[item.id] || 0;
+        return `
         <div class="card">
           <div>
-            <div class="emoji-img">${item.icon}</div>
+            <img class="food-img" src="${item.img}" loading="lazy">
             <div class="title">${item.name}</div>
             <div class="desc">${item.desc}</div>
           </div>
           <div class="price-row">
             <span class="price">${item.price} ₸</span>
-            <button class="btn" onclick="add(${item.id})">${cart[item.id] ? '+' + cart[item.id] : '+'}</button>
+            ${q === 0 ? 
+              `<button class="btn" onclick="mod(${item.id}, 1)">+</button>` :
+              `<div class="counter">
+                <button class="btn minus" onclick="mod(${item.id}, -1)">−</button>
+                <span class="qty">${q}</span>
+                <button class="btn" onclick="mod(${item.id}, 1)">+</button>
+              </div>`
+            }
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
       updateCart();
     }
 
-    function add(id) {
-      cart[id] = (cart[id] || 0) + 1;
+    function mod(id, delta) {
+      cart[id] = (cart[id] || 0) + delta;
+      if (cart[id] <= 0) delete cart[id];
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-      render();
+      renderCatalog();
     }
 
-    function updateCart() {
+    function getTotal() {
       let total = 0;
       for (let id in cart) {
         const item = items.find(i => i.id == id);
-        total += item.price * cart[id];
+        if (item) total += item.price * cart[id];
       }
+      return total;
+    }
+
+    function updateCart() {
+      const total = getTotal();
       const bar = document.getElementById('cartBar');
       if (total > 0) {
         bar.style.display = 'flex';
         document.getElementById('cartText').innerText = `Итого: ${total} ₸`;
+      } else {
+        bar.style.display = 'none';
       }
     }
 
-    function checkout() {
-      tg.sendData(JSON.stringify(cart));
-      tg.showAlert("Заказ отправлен на кухню напрямую! Менеджер свяжется через 1 минуту.");
+    function openModal() {
+      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+      document.getElementById('modalBg').style.display = 'flex';
     }
 
-    render();
+    function closeModal() {
+      document.getElementById('modalBg').style.display = 'none';
+    }
+
+    function sendOrder() {
+      const name = document.getElementById('userName').value.trim() || "Клиент";
+      const phone = document.getElementById('userPhone').value.trim();
+      const addr = document.getElementById('userAddr').value.trim();
+      if (!phone || !addr) {
+        tg.showAlert("Укажите телефон для выставления счета Kaspi и адрес доставки!");
+        return;
+      }
+      let lines = [`🔥 *НОВЫЙ ЗАКАЗ (Telegram App)*`];
+      for (let id in cart) {
+        const item = items.find(i => i.id == id);
+        lines.push(`• ${item.name} x${cart[id]} = ${item.price * cart[id]} ₸`);
+      }
+      lines.push(`\n💰 *Итого:* ${getTotal()} ₸`);
+      lines.push(`👤 *Имя:* ${name}`);
+      lines.push(`📱 *Kaspi тел:* ${phone}`);
+      lines.push(`📍 *Адрес:* ${addr}`);
+
+      const text = encodeURIComponent(lines.join('\n'));
+      tg.openLink(`https://wa.me/${OWNER_WHATSAPP}?text=${text}`);
+    }
+
+    renderCats();
+    renderCatalog();
   </script>
 </body>
 </html>
