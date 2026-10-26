@@ -52,7 +52,13 @@
     }
     .status-badge::before { content: ''; width: 6px; height: 6px; background: #30d158; border-radius: 50%; box-shadow: 0 0 10px #30d158; }
 
-    .cats { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 14px 0; scrollbar-width: none; }
+    /* Добавили margin-bottom, чтобы появилось воздушное пространство перед карточками товаров */
+    .cats { 
+      display: flex; gap: 8px; overflow-x: auto; 
+      padding: 6px 20px 10px 0; 
+      margin-bottom: 14px; 
+      scrollbar-width: none; 
+    }
     .cats::-webkit-scrollbar { display: none; }
     
     .cat-btn {
@@ -65,7 +71,7 @@
     .cat-btn.active { 
       background: var(--accent-gradient); color: #fff; 
       border-color: rgba(255,255,255,0.25); 
-      box-shadow: 0 10px 25px rgba(255,94,58,0.4);
+      box-shadow: 0 3px 12px rgba(255, 94, 58, 0.3);
       transform: translateY(-1px);
     }
 
