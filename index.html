@@ -232,7 +232,9 @@
   <script>
     try {
       const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-      if (tg) tg.expand();
+      if (tg && typeof tg.expand === 'function') {
+        tg.expand();
+      }
 
       const CONFIG = {
         storeName: "Samurai Sushi & Pizza",
@@ -440,5 +442,4 @@
       };
 
       window.closeContactsModal = function() {
-        document.getElementById('contactsModalBg').style.display = 'none';
-        openMenuModal()
+        document.getElementById('contactsModa
