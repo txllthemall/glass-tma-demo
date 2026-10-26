@@ -27,7 +27,6 @@
     }
     body.modal-open { overflow: hidden; }
 
-    /* ХЕДЕР С БРЕНДИНГОМ */
     .header {
       background: var(--card-bg); 
       border: 1px solid var(--card-border);
@@ -38,7 +37,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .brand-logo { width: 42px; height: 42px; border-radius: 12px; object-fit: cover; background: #1a1a22; border: 1px solid var(--card-border); }
+    .brand-logo { width: 42px; height: 42px; border-radius: 12px; object-fit: cover; background: #eee; border: 1px solid var(--card-border); }
     .header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: var(--text-main); }
     .header p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
     
@@ -49,7 +48,6 @@
     }
     .menu-btn:active { transform: scale(0.9); }
 
-    /* КАТЕГОРИИ */
     .cats { 
       display: flex; gap: 8px; overflow-x: auto; 
       padding: 6px 20px 10px 0; 
@@ -71,7 +69,6 @@
       box-shadow: 0 6px 20px rgba(230, 0, 0, 0.3);
     }
 
-    /* КАТАЛОГ ТОВАРОВ С КРАСНОЙ ОБВОДКОЙ */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
     .card {
@@ -106,7 +103,6 @@
     .btn.minus { background: transparent; box-shadow: none; color: var(--text-main); }
     .qty { font-size: 13px; font-weight: 700; text-align: center; width: 100%; color: var(--text-main); }
 
-    /* ПЛАВАЮЩАЯ КОРЗИНА */
     .cart-bar {
       position: fixed; bottom: 16px; left: 14px; right: 14px;
       background: linear-gradient(135deg, #e60000, #990000); 
@@ -115,7 +111,6 @@
       color: #fff; font-weight: 700; box-shadow: 0 16px 40px rgba(230, 0, 0, 0.4); cursor: pointer; z-index: 10;
     }
 
-    /* МОДАЛЬНЫЕ ОКНА */
     .modal-bg {
       position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       display: none; align-items: flex-end; z-index: 20;
@@ -147,7 +142,6 @@
     .close-btn { color: var(--text-muted); text-align: center; margin-top: 14px; font-size: 13px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
     .close-btn:hover { color: var(--text-main); }
 
-    /* БОКОВОЕ МЕНЮ */
     .menu-item {
       padding: 14px 16px; background: #f5f5f7; border: 1px solid var(--card-border);
       border-radius: 14px; margin-bottom: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
@@ -160,12 +154,11 @@
 </head>
 <body>
 
-  <!-- ХЕДЕР -->
   <div class="header">
     <div class="header-left">
-      <img class="brand-logo" id="brandLogo" src="" alt="Logo">
+      <img class="brand-logo" id="brandLogo" src="" alt="Logo" onerror="this.src='https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&q=80'">
       <div>
-        <h1 id="brandName">Загрузка...</h1>
+        <h1 id="brandName">Samurai</h1>
         <p id="brandTagline">Суши и Пицца • Алматы</p>
       </div>
     </div>
@@ -187,7 +180,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА: ОФОРМЛЕНИЕ ЗАКАЗА -->
+  <!-- МОДАЛКА: ОФОРМЛЕНИЕ -->
   <div class="modal-bg" id="checkoutModalBg" onclick="closeCheckoutModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <h2>Оформление заказа</h2>
@@ -199,7 +192,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО: БОКОВОЕ МЕНЮ -->
+  <!-- МОДАЛКА: МЕНЮ -->
   <div class="modal-bg" id="menuModalBg" onclick="closeMenuModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <h2>Информация</h2>
@@ -237,232 +230,215 @@
   </div>
 
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+    try {
+      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      if (tg) tg.expand();
 
-    // КОНФИГУРАЦИЯ САМУРАЙ СУШИ & ПИЦЦА
-    const CONFIG = {
-      storeName: "Samurai Sushi & Pizza",
-      tagline: "Японская и итальянская кухня",
-      logoUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&q=80",
-      whatsapp: "77001234567",
-      instagram: "instagram.com/samurai.almaty",
-      address: "ул. Желтоксан 120",
-      workHours: "Ежедневно с 11:00 до 23:00",
-      faq: [
-        { q: "Какая минимальная сумма заказа?", a: "Минимальная сумма заказа для бесплатной доставки по городу составляет 5000 ₸." },
-        { q: "Как оплатить заказ?", a: "Перевод на Kaspi Gold по номеру или Kaspi QR при получении курьеру." },
-        { q: "Сколько готовится заказ?", a: "Свежие роллы и горячая пицца доставляются в среднем за 45-55 минут." }
-      ]
-    };
+      const CONFIG = {
+        storeName: "Samurai Sushi & Pizza",
+        tagline: "Японская и итальянская кухня",
+        logoUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&q=80",
+        whatsapp: "77001234567",
+        instagram: "instagram.com/samurai.almaty",
+        address: "ул. Желтоксан 120",
+        workHours: "Ежедневно с 11:00 до 23:00",
+        faq: [
+          { q: "Какая минимальная сумма заказа?", a: "Минимальная сумма заказа для бесплатной доставки по городу составляет 5000 ₸." },
+          { q: "Как оплатить заказ?", a: "Перевод на Kaspi Gold по номеру или Kaspi QR при получении курьеру." },
+          { q: "Сколько готовится заказ?", a: "Свежие роллы и горячая пицца доставляются в среднем за 45-55 минут." }
+        ]
+      };
 
-    document.getElementById('brandName').innerText = CONFIG.storeName;
-    document.getElementById('brandTagline').innerText = CONFIG.tagline;
-    document.getElementById('brandLogo').src = CONFIG.logoUrl;
+      document.getElementById('brandName').innerText = CONFIG.storeName;
+      document.getElementById('brandTagline').innerText = CONFIG.tagline;
+      document.getElementById('brandLogo').src = CONFIG.logoUrl;
 
-    document.getElementById('faqList').innerHTML = CONFIG.faq.map(item => `
-      <div class="faq-question">${item.q}</div>
-      <div class="faq-answer">${item.a}</div>
-    `).join('');
+      document.getElementById('faqList').innerHTML = CONFIG.faq.map(item => `
+        <div class="faq-question">${item.q}</div>
+        <div class="faq-answer">${item.a}</div>
+      `).join('');
 
-    document.getElementById('contactsContent').innerHTML = `
-      📍 <b>Адрес:</b> ${CONFIG.address}<br><br>
-      ⏰ <b>График работы:</b> ${CONFIG.workHours}<br><br>
-      📸 <b>Instagram:</b> <a href="https://${CONFIG.instagram}" target="_blank" style="color: var(--accent);">${CONFIG.instagram}</a><br><br>
-      📞 <b>WhatsApp:</b> +${CONFIG.whatsapp}
-    `;
-
-    const items = [
-      { 
-        id: 1, cat: "Роллы", name: "Филадельфия Классик", 
-        desc: "Нежнейший лосось, сливочный сыр крем-чиз, огурец, рис", 
-        fullDesc: "🍱 Легендарный ролл с большим количеством охлажденного норвежского лосося, творожным сыром премиум-качества и свежим хрустящим огурцом. В порции 8 штук (260 г).", 
-        price: 2890, img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500&q=80" 
-      },
-      { 
-        id: 2, cat: "Пицца", name: "Пепперони Самурай", 
-        desc: "Пикантная колбаса пепперони, моцарелла, фирменный томатный соус", 
-        fullDesc: "🍕 Классическая итальянская пицца на тонком тесте с хрустящей корочкой. Двойная порция острой колбасы пепперони, тягучий сыр моцарелла и фирменный соус из спелых томатов. Вес: 520 г.", 
-        price: 3690, img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80" 
-      },
-      { 
-        id: 3, cat: "Сеты", name: "Сет «Самурай»", 
-        desc: "Филадельфия, Калифорния, Дракон, 24 штуки", 
-        fullDesc: "🔥 Сбалансированный набор для компании. В составе: Филадельфия с лососем, Калифорния в кунжуте и запеченный ролл Дракон с угрем. Всего 24 ролла (850 г).", 
-        price: 7990, img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&q=80" 
-      },
-      { 
-        id: 4, cat: "Пицца", name: "Пицца Четыре Сыра", 
-        desc: "Моцарелла, дорблю, пармезан, чеддер, сливочный соус", 
-        fullDesc: "🧀 Насыщенный сырный вкус для истинных гурманов. Сливочная основа, тягучая моцарелла, пикантный сыр с плесенью дорблю, выдержанный пармезан и золотистый чеддер. Вес: 480 г.", 
-        price: 3890, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80" 
-      },
-      { 
-        id: 5, cat: "Роллы", name: "Запеченный с угрем", 
-        desc: "Копченый угорь, соус унаги, кунжут, сырная шапочка", 
-        fullDesc: "🔥 Горячий запеченный ролл под фирменной сочной сырной шапкой, с нежным копченым угрем, авокадо и сладким соусом унаги. Порция: 8 штук (280 г).", 
-        price: 3290, img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80" 
-      },
-      { 
-        id: 6, cat: "Напитки", name: "Coca-Cola 0.5л", 
-        desc: "Освежающий газированный напиток", 
-        fullDesc: "🥤 Классическая ледяная Coca-Cola в пластиковой бутылке 0.5 л.", 
-        price: 450, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80" 
-      }
-    ];
-
-    const categories = ["Все", "Роллы", "Пицца", "Сеты", "Напитки"];
-    let activeCat = "Все";
-    let cart = {};
-
-    function initApp() {
-      renderCats();
-      renderCatalogOnce();
-    }
-
-    function renderCats() {
-      document.getElementById('cats').innerHTML = categories.map(c => 
-        `<button class="cat-btn ${c === activeCat ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
-      ).join('');
-    }
-
-    function setCat(c) {
-      activeCat = c;
-      if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
-      renderCats();
-      
-      const cards = document.querySelectorAll('.card');
-      cards.forEach(card => {
-        const cardCat = card.dataset.category;
-        if (activeCat === "Все" || cardCat === activeCat) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    }
-
-    function renderCatalogOnce() {
-      document.getElementById('catalog').innerHTML = items.map(item => {
-        return `
-        <div class="card" data-category="${item.cat}" onclick="openItemModal(${item.id})">
-          <div>
-            <div class="food-img-wrap">
-              <img class="food-img" src="${item.img}" loading="lazy">
-            </div>
-            <div class="title">${item.name}</div>
-            <div class="desc">${item.desc}</div>
-          </div>
-          <div class="price-row" onclick="event.stopPropagation()">
-            <span class="price">${item.price} ₸</span>
-            <div class="counter-wrap" id="counter-${item.id}">
-              ${getCounterHTML(item.id, 0)}
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-      updateCart();
-    }
-
-    function getCounterHTML(id, q) {
-      if (q === 0) {
-        return `<button class="btn" onclick="mod(${id}, 1)">+</button>`;
-      } else {
-        return `
-          <div class="counter">
-            <button class="btn minus" onclick="mod(${id}, -1)">−</button>
-            <span class="qty">${q}</span>
-            <button class="btn" onclick="mod(${id}, 1)">+</button>
-          </div>
-        `;
-      }
-    }
-
-    function updateCardNode(id) {
-      const q = cart[id] || 0;
-      const counterWrap = document.getElementById(`counter-${id}`);
-      if (counterWrap) {
-        counterWrap.innerHTML = getCounterHTML(id, q);
-      }
-      
-      const modalContent = document.getElementById('itemModalContent');
-      if (modalContent && modalContent.dataset.itemId == id) {
-        const modalFooterRight = modalContent.querySelector('.modal-footer-right');
-        if (modalFooterRight) {
-          modalFooterRight.innerHTML = getCounterHTML(id, q);
-        }
-      }
-    }
-
-    function openItemModal(id) {
-      const item = items.find(i => i.id == id);
-      if (!item) return;
-      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-      const q = cart[item.id] || 0;
-      const modalContent = document.getElementById('itemModalContent');
-      modalContent.dataset.itemId = item.id;
-      modalContent.innerHTML = `
-        <img class="modal-img" src="${item.img}">
-        <h2>${item.name}</h2>
-        <div class="modal-desc">${item.fullDesc}</div>
-        <div class="modal-footer">
-          <span class="modal-price">${item.price} ₸</span>
-          <div class="modal-footer-right">
-            ${getCounterHTML(item.id, q)}
-          </div>
-        </div>
-        <div class="close-btn" onclick="closeItemModal()">Закрыть</div>
+      document.getElementById('contactsContent').innerHTML = `
+        📍 <b>Адрес:</b> ${CONFIG.address}<br><br>
+        ⏰ <b>График работы:</b> ${CONFIG.workHours}<br><br>
+        📸 <b>Instagram:</b> <a href="https://${CONFIG.instagram}" target="_blank" style="color: var(--accent);">${CONFIG.instagram}</a><br><br>
+        📞 <b>WhatsApp:</b> +${CONFIG.whatsapp}
       `;
-      document.body.classList.add('modal-open');
-      document.getElementById('itemModalBg').style.display = 'flex';
-    }
 
-    function closeItemModal() {
-      document.body.classList.remove('modal-open');
-      document.getElementById('itemModalBg').style.display = 'none';
-    }
+      const items = [
+        { 
+          id: 1, cat: "Роллы", name: "Филадельфия Классик", 
+          desc: "Нежнейший лосось, сливочный сыр крем-чиз, огурец, рис", 
+          fullDesc: "🍱 Легендарный ролл с большим количеством охлажденного норвежского лосося, творожным сыром премиум-качества и свежим хрустящим огурцом. В порции 8 штук (260 г).", 
+          price: 2890, img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500&q=80" 
+        },
+        { 
+          id: 2, cat: "Пицца", name: "Пепперони Самурай", 
+          desc: "Пикантная колбаса пепперони, моцарелла, фирменный томатный соус", 
+          fullDesc: "🍕 Классическая итальянская пицца на тонком тесте с хрустящей корочкой. Двойная порция острой колбасы пепперони, тягучий сыр моцарелла и фирменный соус из спелых томатов. Вес: 520 г.", 
+          price: 3690, img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80" 
+        },
+        { 
+          id: 3, cat: "Сеты", name: "Сет «Самурай»", 
+          desc: "Филадельфия, Калифорния, Дракон, 24 штуки", 
+          fullDesc: "🔥 Сбалансированный набор для компании. В составе: Филадельфия с лососем, Калифорния в кунжуте и запеченный ролл Дракон с угрем. Всего 24 ролла (850 г).", 
+          price: 7990, img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&q=80" 
+        },
+        { 
+          id: 4, cat: "Пицца", name: "Пицца Четыре Сыра", 
+          desc: "Моцарелла, дорблю, пармезан, чеддер, сливочный соус", 
+          fullDesc: "🧀 Насыщенный сырный вкус для истинных гурманов. Сливочная основа, тягучая моцарелла, пикантный сыр с плесенью дорблю, выдержанный пармезан и золотистый чеддер. Вес: 480 г.", 
+          price: 3890, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80" 
+        },
+        { 
+          id: 5, cat: "Роллы", name: "Запеченный с угрем", 
+          desc: "Копченый угорь, соус унаги, кунжут, сырная шапочка", 
+          fullDesc: "🔥 Горячий запеченный ролл под фирменной сочной сырной шапкой, с нежным копченым угрем, авокадо и сладким соусом унаги. Порция: 8 штук (280 г).", 
+          price: 3290, img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80" 
+        },
+        { 
+          id: 6, cat: "Напитки", name: "Coca-Cola 0.5л", 
+          desc: "Освежающий газированный напиток", 
+          fullDesc: "🥤 Классическая ледяная Coca-Cola в пластиковой бутылке 0.5 л.", 
+          price: 450, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80" 
+        }
+      ];
 
-    function openMenuModal() {
-      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-      document.body.classList.add('modal-open');
-      document.getElementById('menuModalBg').style.display = 'flex';
-    }
-    function closeMenuModal() {
-      document.body.classList.remove('modal-open');
-      document.getElementById('menuModalBg').style.display = 'none';
-    }
+      const categories = ["Все", "Роллы", "Пицца", "Сеты", "Напитки"];
+      let activeCat = "Все";
+      let cart = {};
 
-    function openFaqModal() {
-      closeMenuModal();
-      document.body.classList.add('modal-open');
-      document.getElementById('faqModalBg').style.display = 'flex';
-    }
-    function closeFaqModal() {
-      document.getElementById('faqModalBg').style.display = 'none';
-      openMenuModal();
-    }
+      window.renderCats = function() {
+        document.getElementById('cats').innerHTML = categories.map(c => 
+          `<button class="cat-btn ${c === activeCat ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
+        ).join('');
+      };
 
-    function openContactsModal() {
-      closeMenuModal();
-      document.body.classList.add('modal-open');
-      document.getElementById('contactsModalBg').style.display = 'flex';
-    }
-    function closeContactsModal() {
-      document.getElementById('contactsModalBg').style.display = 'none';
-      openMenuModal();
-    }
+      window.setCat = function(c) {
+        activeCat = c;
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        renderCats();
+        
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          const cardCat = card.dataset.category;
+          if (activeCat === "Все" || cardCat === activeCat) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      };
 
-    function mod(id, delta) {
-      cart[id] = (cart[id] || 0) + delta;
-      if (cart[id] <= 0) delete cart[id];
-      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-      
-      updateCardNode(id);
-      updateCart();
-    }
+      window.renderCatalogOnce = function() {
+        document.getElementById('catalog').innerHTML = items.map(item => {
+          return `
+          <div class="card" data-category="${item.cat}" onclick="openItemModal(${item.id})">
+            <div>
+              <div class="food-img-wrap">
+                <img class="food-img" src="${item.img}" loading="lazy">
+              </div>
+              <div class="title">${item.name}</div>
+              <div class="desc">${item.desc}</div>
+            </div>
+            <div class="price-row" onclick="event.stopPropagation()">
+              <span class="price">${item.price} ₸</span>
+              <div class="counter-wrap" id="counter-${item.id}">
+                ${getCounterHTML(item.id, 0)}
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+        updateCart();
+      };
 
-    function getTotal() {
-      let total = 0;
-      for (let id in cart) {
-        const item = items.
+      window.getCounterHTML = function(id, q) {
+        if (q === 0) {
+          return `<button class="btn" onclick="mod(${id}, 1)">+</button>`;
+        } else {
+          return `
+            <div class="counter">
+              <button class="btn minus" onclick="mod(${id}, -1)">−</button>
+              <span class="qty">${q}</span>
+              <button class="btn" onclick="mod(${id}, 1)">+</button>
+            </div>
+          `;
+        }
+      };
+
+      window.updateCardNode = function(id) {
+        const q = cart[id] || 0;
+        const counterWrap = document.getElementById(`counter-${id}`);
+        if (counterWrap) {
+          counterWrap.innerHTML = getCounterHTML(id, q);
+        }
+        
+        const modalContent = document.getElementById('itemModalContent');
+        if (modalContent && modalContent.dataset.itemId == id) {
+          const modalFooterRight = modalContent.querySelector('.modal-footer-right');
+          if (modalFooterRight) {
+            modalFooterRight.innerHTML = getCounterHTML(id, q);
+          }
+        }
+      };
+
+      window.openItemModal = function(id) {
+        const item = items.find(i => i.id == id);
+        if (!item) return;
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+        const q = cart[item.id] || 0;
+        const modalContent = document.getElementById('itemModalContent');
+        modalContent.dataset.itemId = item.id;
+        modalContent.innerHTML = `
+          <img class="modal-img" src="${item.img}">
+          <h2>${item.name}</h2>
+          <div class="modal-desc">${item.fullDesc}</div>
+          <div class="modal-footer">
+            <span class="modal-price">${item.price} ₸</span>
+            <div class="modal-footer-right">
+              ${getCounterHTML(item.id, q)}
+            </div>
+          </div>
+          <div class="close-btn" onclick="closeItemModal()">Закрыть</div>
+        `;
+        document.body.classList.add('modal-open');
+        document.getElementById('itemModalBg').style.display = 'flex';
+      };
+
+      window.closeItemModal = function() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('itemModalBg').style.display = 'none';
+      };
+
+      window.openMenuModal = function() {
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        document.body.classList.add('modal-open');
+        document.getElementById('menuModalBg').style.display = 'flex';
+      };
+
+      window.closeMenuModal = function() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('menuModalBg').style.display = 'none';
+      };
+
+      window.openFaqModal = function() {
+        closeMenuModal();
+        document.body.classList.add('modal-open');
+        document.getElementById('faqModalBg').style.display = 'flex';
+      };
+
+      window.closeFaqModal = function() {
+        document.getElementById('faqModalBg').style.display = 'none';
+        openMenuModal();
+      };
+
+      window.openContactsModal = function() {
+        closeMenuModal();
+        document.body.classList.add('modal-open');
+        document.getElementById('contactsModalBg').style.display = 'flex';
+      };
+
+      window.closeContactsModal = function() {
+        document.getElementById('contactsModalBg').style.display = 'none';
+        openMenuModal()
