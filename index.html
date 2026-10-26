@@ -27,12 +27,6 @@
       color: var(--text-main);
       min-height: 100vh;
       padding: 16px 14px 110px;
-      animation: pageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes pageIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
     }
 
     .header {
@@ -65,14 +59,14 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-muted); padding: 10px 18px; border-radius: 16px; 
       font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.25s ease;
     }
     .cat-btn:active { transform: scale(0.92); }
     .cat-btn.active { 
       background: var(--accent-gradient); color: #fff; 
       border-color: rgba(255,255,255,0.3); 
       box-shadow: 0 6px 20px rgba(255, 94, 58, 0.4);
-      transform: translateY(-2px) scale(1.02);
+      transform: translateY(-1px);
     }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -82,13 +76,13 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 20px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
       cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
     }
-    .card:active { transform: scale(0.94); border-color: var(--card-border-active); }
+    .card.hidden { display: none !important; }
+    .card:active { transform: scale(0.96); border-color: var(--card-border-active); }
 
     .food-img-wrap { width: 100%; height: 115px; border-radius: 14px; overflow: hidden; margin-bottom: 9px; background: #121216; position: relative; }
-    .food-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    .card:hover .food-img { transform: scale(1.08); }
+    .food-img { width: 100%; height: 100%; object-fit: cover; }
 
     .title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; line-height: 1.25; letter-spacing: -0.2px; }
     .desc { font-size: 10.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -96,25 +90,33 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 4px; }
     .price { font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
     
-    /* Жестко центрированный счетчик */
+    /* ИДЕАЛЬНЫЙ CENTERING ЧЕРЕЗ CSS GRID (3 КОЛОНКИ: МИНУС, ЦИФРА, ПЛЮС) */
     .counter { 
-      display: flex; align-items: center; justify-content: center; gap: 4px; 
-      background: rgba(255,255,255,0.07); border-radius: 12px; padding: 2px; 
-      border: 1px solid rgba(255,255,255,0.1); height: 32px; 
+      display: grid; 
+      grid-template-columns: 32px 24px 32px; 
+      align-items: center; 
+      justify-items: center;
+      background: rgba(255,255,255,0.07); 
+      border-radius: 12px; 
+      border: 1px solid rgba(255,255,255,0.1); 
+      height: 34px; 
+      padding: 0 2px;
     }
     .btn { 
       background: var(--accent-gradient); border: none; color: #fff; 
-      width: 28px; height: 28px; border-radius: 10px; font-weight: 700; 
+      width: 28px; height: 28px; border-radius: 9px; font-weight: 700; 
       font-size: 15px; cursor: pointer; display: flex; align-items: center; 
       justify-content: center; box-shadow: 0 4px 12px rgba(255,94,58,0.4); 
-      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); 
+      transition: transform 0.1s ease; 
     }
-    .btn:active { transform: scale(0.75); }
+    .btn:active { transform: scale(0.8); }
     .btn.minus { background: transparent; box-shadow: none; color: var(--text-main); }
+    
     .qty { 
-      font-size: 13px; font-weight: 700; width: 22px; height: 100%;
-      display: flex; align-items: center; justify-content: center; 
-      text-align: center; line-height: 1;
+      font-size: 13px; 
+      font-weight: 700; 
+      text-align: center; 
+      width: 100%;
     }
 
     .cart-bar {
@@ -155,7 +157,7 @@
     .submit-btn {
       width: 100%; background: var(--accent-gradient); color: #fff; border: none;
       padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; margin-top: 6px; cursor: pointer;
-      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 10px 30px rgba(241, 70, 53, 0.45); transition: transform 0.2s ease;
     }
     .submit-btn:active { transform: scale(0.96); }
     .close-btn { color: var(--text-muted); text-align: center; margin-top: 14px; font-size: 13px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
@@ -247,6 +249,11 @@
     let activeCat = "Все";
     let cart = {};
 
+    function initApp() {
+      renderCats();
+      renderCatalogOnce();
+    }
+
     function renderCats() {
       document.getElementById('cats').innerHTML = categories.map(c => 
         `<button class="cat-btn ${c === activeCat ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
@@ -257,15 +264,23 @@
       activeCat = c;
       if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
       renderCats();
-      renderCatalog();
+      
+      // Мгновенная фильтрация без перерисовки DOM (ноль мерцаний!)
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const cardCat = card.dataset.category;
+        if (activeCat === "Все" || cardCat === activeCat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
     }
 
-    function renderCatalog() {
-      const filtered = activeCat === "Все" ? items : items.filter(i => i.cat === activeCat);
-      document.getElementById('catalog').innerHTML = filtered.map(item => {
-        const q = cart[item.id] || 0;
+    function renderCatalogOnce() {
+      document.getElementById('catalog').innerHTML = items.map(item => {
         return `
-        <div class="card" data-item-id="${item.id}" onclick="openItemModal(${item.id})">
+        <div class="card" data-category="${item.cat}" onclick="openItemModal(${item.id})">
           <div>
             <div class="food-img-wrap">
               <img class="food-img" src="${item.img}" loading="lazy">
@@ -276,7 +291,7 @@
           <div class="price-row" onclick="event.stopPropagation()">
             <span class="price">${item.price} ₸</span>
             <div class="counter-wrap" id="counter-${item.id}">
-              ${getCounterHTML(item.id, q)}
+              ${getCounterHTML(item.id, 0)}
             </div>
           </div>
         </div>`;
@@ -299,20 +314,20 @@
     }
 
     function updateCardNode(id) {
-      const item = items.find(i => i.id == id);
-      if (!item) return;
       const q = cart[id] || 0;
+      
+      // Обновляем в каталоге
       const counterWrap = document.getElementById(`counter-${id}`);
       if (counterWrap) {
         counterWrap.innerHTML = getCounterHTML(id, q);
       }
       
-      // Если открыта модалка этого товара, тоже обновляем в ней счетчик
+      // Обновляем в модалке, если она открыта для этого товара
       const modalContent = document.getElementById('itemModalContent');
       if (modalContent && modalContent.dataset.itemId == id) {
-        const modalFooter = modalContent.querySelector('.modal-footer-right');
-        if (modalFooter) {
-          modalFooter.innerHTML = getCounterHTML(id, q);
+        const modalFooterRight = modalContent.querySelector('.modal-footer-right');
+        if (modalFooterRight) {
+          modalFooterRight.innerHTML = getCounterHTML(id, q);
         }
       }
     }
@@ -323,8 +338,9 @@
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
       const q = cart[item.id] || 0;
-      document.getElementById('itemModalContent').dataset.itemId = item.id;
-      document.getElementById('itemModalContent').innerHTML = `
+      const modalContent = document.getElementById('itemModalContent');
+      modalContent.dataset.itemId = item.id;
+      modalContent.innerHTML = `
         <img class="modal-img" src="${item.img}">
         <h2>${item.name}</h2>
         <div class="modal-desc">${item.fullDesc}</div>
@@ -348,7 +364,6 @@
       if (cart[id] <= 0) delete cart[id];
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
       
-      // Точечное обновление без перерисовки всего каталога и без миганий!
       updateCardNode(id);
       updateCart();
     }
@@ -404,8 +419,7 @@
       tg.openLink(`https://wa.me/${OWNER_WHATSAPP}?text=${text}`);
     }
 
-    renderCats();
-    renderCatalog();
+    initApp();
   </script>
 </body>
 </html>
